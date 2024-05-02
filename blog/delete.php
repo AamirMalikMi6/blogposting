@@ -12,3 +12,4 @@ if ($blog->deleteBlog($id)) {
 } else {
     echo "Error: Unable to delete blog.";
 }
+?>

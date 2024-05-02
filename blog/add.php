@@ -24,14 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 include('../header.php');
 ?>
-    <h1>Add New Blog</h1>
-    <form method="post" enctype="multipart/form-data">
-        <label>Title:</label><br>
-        <input type="text" name="title" required><br><br>
-        <label>Description:</label><br>
-        <textarea name="description" required></textarea><br><br>
-        <label>Image:</label><br>
-        <input type="file" name="image" required><br><br>
-        <input type="submit" value="Submit">
-    </form>
+<h1>Add New Blog</h1>
+<form method="post" enctype="multipart/form-data">
+    <label>Title:</label><br>
+    <input type="text" name="title" required><br><br>
+    <label>Description:</label><br>
+    <textarea name="description" required></textarea><br><br>
+    <label>Image:</label><br>
+    <input type="file" name="image" required><br><br>
+    <input type="submit" value="Submit">
+</form>
 <?php include('../footer.php'); ?>

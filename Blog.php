@@ -7,54 +7,73 @@ class Blog {
     }
 
     public function getAllBlogs() {
-        $conn = $this->db->getConnection();
         $query = "SELECT * FROM blogs";
-        $result = mysqli_query($conn, $query);
-        $blogs = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $blogs[] = $row;
-        }
-        return $blogs;
+        $stmt = $this->db->getConnection()->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function addBlog($title, $description, $image) {
-        $conn = $this->db->getConnection();
-        $query = "INSERT INTO blogs (title, description, image) VALUES ('$title', '$description', '$image')";
-        if (mysqli_query($conn, $query)) {
-            return true;
-        } else {
-            return false;
+        session_start();
+        if (!isset($_SESSION['user'])) {
+            return false; // User not authorized
         }
+
+        $query = "INSERT INTO blogs (title, description, image) VALUES (:title, :description, :image)";
+        $stmt = $this->db->getConnection()->prepare($query);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':image', $image);
+        return $stmt->execute();
     }
 
     public function editBlog($id, $title, $description, $image) {
-        $conn = $this->db->getConnection();
-        $query = "UPDATE blogs SET title='$title', description='$description'";
+        session_start();
+        if (!isset($_SESSION['user'])) {
+            return false; // User not authorized
+        }
+    
+        $query = "UPDATE blogs SET title=:title, description=:description";
         if ($image !== "") {
-            $query .= ", image='$image'";
+            $query .= ", image=:image";
         }
-        $query .= " WHERE id=$id";
-        if (mysqli_query($conn, $query)) {
-            return true;
-        } else {
-            return false;
+        $query .= " WHERE id=:id";
+        $stmt = $this->db->getConnection()->prepare($query);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':description', $description);
+        if ($image !== "") { // Conditionally bind image parameter
+            $stmt->bindParam(':image', $image);
         }
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
     }
+    
 
     public function deleteBlog($id) {
-        $conn = $this->db->getConnection();
-        $query = "DELETE FROM blogs WHERE id=$id";
-        if (mysqli_query($conn, $query)) {
-            return true;
-        } else {
-            return false;
+        session_start();
+        if (!isset($_SESSION['user'])) {
+            return false; // User not authorized
         }
+
+        $query = "DELETE FROM blogs WHERE id=:id";
+        $stmt = $this->db->getConnection()->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
     }
 
     public function getBlog($id) {
-        $conn = $this->db->getConnection(); 
-        $query = "SELECT * FROM blogs WHERE id = $id";
-        $result = mysqli_query($conn, $query);
-        return mysqli_fetch_assoc($result);
-      }
+        $query = "SELECT * FROM blogs WHERE id = :id";
+        $stmt = $this->db->getConnection()->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function trackView($id) {
+        $query = "UPDATE blogs SET views = views + 1 WHERE id = :id";
+        $stmt = $this->db->getConnection()->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+    }    
+    
 }

@@ -7,9 +7,12 @@ class Database {
     public $conn;
 
     public function __construct() {
-        $this->conn = mysqli_connect($this->host, $this->user, $this->password, $this->database);
-        if (!$this->conn) {
-            die("Connection failed: " . mysqli_connect_error());
+        try {
+            $this->conn = new PDO("mysql:host=$this->host;dbname=$this->database", $this->user, $this->password);
+            // Set the PDO error mode to exception
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch(PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
         }
     }
 

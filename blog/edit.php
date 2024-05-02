@@ -28,17 +28,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 include('../header.php');
 ?>
-    <h1>Edit Blog</h1>
-    <form method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-        <label>Title:</label><br>
-        <input type="text" name="title" value="<?php echo $row['title']; ?>" required><br><br>
-        <label>Description:</label><br>
-        <textarea name="description" required><?php echo $row['description']; ?></textarea><br><br>
-        <label>Current Image:</label><br>
-        <img src="../images/<?php echo $row['image']; ?>" alt=""><br><br>
-        <label>New Image:</label><br>
-        <input type="file" name="image"><br><br>
-        <input type="submit" value="Update">
-    </form>
+<h1>Edit Blog</h1>
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+    <label>Title:</label><br>
+    <input type="text" name="title" value="<?php echo $row['title']; ?>" required><br><br>
+    <label>Description:</label><br>
+    <textarea name="description" required><?php echo $row['description']; ?></textarea><br><br>
+    <label>Current Image:</label><br>
+    <img src="../images/<?php echo $row['image']; ?>" alt=""><br><br>
+    <label>New Image:</label><br>
+    <input type="file" name="image"><br><br>
+    <input type="submit" value="Update">
+</form>
 <?php include('../footer.php'); ?>
